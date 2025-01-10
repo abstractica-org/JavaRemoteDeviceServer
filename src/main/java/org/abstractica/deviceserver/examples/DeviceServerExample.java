@@ -8,17 +8,17 @@ import java.net.UnknownHostException;
 
 public class DeviceServerExample implements DeviceServerListener, DevicePacketHandler, DeviceConnectionListener
 {
-	public static void main(String[] args) throws SocketException, UnknownHostException, InterruptedException
+	public static void main(String[] args) throws Exception
 	{
 		(new DeviceServerExample()).runExample();
 	}
 
-	public void runExample() throws InterruptedException, SocketException, UnknownHostException
+	public void runExample() throws Exception
 	{
 		System.out.println("Creating server...");
 		DeviceServer server = new DeviceServerImpl(3377,1024,10,1000, this);
 		System.out.println("Creating device...");
-		Device myDevice = server.createDevice(10313748, "TestDevice", 1);
+		Device myDevice = server.createDevice(10314706, "TestDevice", 1);
 		System.out.println("Adding listener...");
 		myDevice.addConnectionListener(this);
 		System.out.println("Adding device to server...");
@@ -29,10 +29,14 @@ public class DeviceServerExample implements DeviceServerListener, DevicePacketHa
 		myDevice.waitForConnection();
 		//server.waitForAllDevicesToConnect();
 		System.out.println("Device is connected!");
-		System.out.println("Sending packet!");
-		Response response = myDevice.sendPacket(42, 1, 2, null, true, false);
-		System.out.println("Waiting for response...");
-		System.out.println("Response: " + response.getResponse());
+		while(true)
+		{
+			System.out.println("Sending packet!");
+			Response response = myDevice.sendPacket(42, 1, 2, null, true, false);
+			System.out.println("Waiting for response...");
+			System.out.println("Response: " + response.getResponse());
+			Thread.sleep(200);
+		}
 	}
 
 	@Override

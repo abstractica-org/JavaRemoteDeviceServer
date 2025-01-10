@@ -1,9 +1,8 @@
 package org.abstractica.deviceserver.basedeviceserver.impl;
 
-import org.abstractica.javablocks.basic.BasicBlockFactory;
-import org.abstractica.javablocks.basic.ThreadBlock;
-import org.abstractica.javablocks.basic.ThreadControl;
-import org.abstractica.javablocks.basic.impl.BasicBlockFactoryImpl;
+import org.abstractica.javablocks.blocks.basic.BasicBlocks;
+import org.abstractica.javablocks.blocks.basic.ThreadBlock;
+import org.abstractica.javablocks.blocks.basic.ThreadControl;
 import org.abstractica.deviceserver.basedeviceserver.BaseDeviceServerPacketSendCallback;
 import org.abstractica.deviceserver.basedeviceserver.BaseDeviceServer;
 import org.abstractica.deviceserver.basedeviceserver.BaseDeviceServerListener;
@@ -35,8 +34,8 @@ public class BaseDeviceServerImpl implements BaseDeviceServer, Runnable
     {
         this.packetServer = new DevicePacketServerImpl(port, maxPacketSize, bufferSize);
         this.connectionHandler = new BaseDeviceConnectionHandlerImpl(packetServer, listener);
-        BasicBlockFactory basicFactory = BasicBlockFactoryImpl.getInstance();
-        ThreadBlock<DevicePacketInfo> threadBlock = basicFactory.getThreadBlock();
+        ThreadBlock<DevicePacketInfo> threadBlock = BasicBlocks.getThreadBlock();
+        threadBlock.setDebugReporter(null);
         threadBlock.setInput(packetServer);
         threadBlock.setOutput(connectionHandler);
         threadControl = threadBlock;
@@ -60,7 +59,7 @@ public class BaseDeviceServerImpl implements BaseDeviceServer, Runnable
                                        byte[] load,
                                        boolean blocking,
                                        boolean forceSend,
-                                       BaseDeviceServerPacketSendCallback callback) throws InterruptedException
+                                       BaseDeviceServerPacketSendCallback callback) throws Exception
     {
         return connectionHandler.sendPacket(deviceId, command, arg1, arg2, load, blocking, forceSend, callback);
     }
@@ -92,7 +91,7 @@ public class BaseDeviceServerImpl implements BaseDeviceServer, Runnable
     }
 
     @Override
-    public void stopGracefully() throws InterruptedException
+    public void stop() throws InterruptedException
     {
         if (running)
         {
@@ -100,30 +99,15 @@ public class BaseDeviceServerImpl implements BaseDeviceServer, Runnable
             synchronized(this)
             {
                 alivenessThread.interrupt();
-                packetServer.stopGracefully();
-                threadControl.stopGracefully();
+                packetServer.stop();
+                threadControl.stop();
             }
             alivenessThread.join();
             System.out.println("Remote device server stopped gracefully.");
         }
     }
 
-    @Override
-    public void stopNow() throws InterruptedException
-    {
-        if (running)
-        {
-            running = false;
-            synchronized(this)
-            {
-                alivenessThread.interrupt();
-                packetServer.stopNow();
-                threadControl.stopNow();
-            }
-            alivenessThread.join();
-            System.out.println("Remote device server stopped.");
-        }
-    }
+
 
     @Override
     public synchronized boolean isRunning()
@@ -140,7 +124,7 @@ public class BaseDeviceServerImpl implements BaseDeviceServer, Runnable
             {
                 connectionHandler.updateAliveness();
                 wait(updateInterval);
-            } catch (InterruptedException e)
+            } catch (Exception e)
             {
 
             }

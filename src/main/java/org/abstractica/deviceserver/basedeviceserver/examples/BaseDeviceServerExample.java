@@ -11,7 +11,7 @@ import java.nio.charset.StandardCharsets;
 
 public class BaseDeviceServerExample implements BaseDeviceServerListener, BaseDeviceServerPacketSendCallback
 {
-	public static void main(String[] args) throws SocketException, UnknownHostException, InterruptedException
+	public static void main(String[] args) throws Exception
 	{
 		BaseDeviceServerExample exampleServer = new BaseDeviceServerExample(3377, 1024, 10, 1000);
 		exampleServer.run();
@@ -27,7 +27,7 @@ public class BaseDeviceServerExample implements BaseDeviceServerListener, BaseDe
 		server = new BaseDeviceServerImpl(port, maxPacketSize, bufferSize, updateInterval, this);
 	}
 
-	public void run() throws InterruptedException
+	public void run() throws Exception
 	{
 		server.start();
 		int command = 0;

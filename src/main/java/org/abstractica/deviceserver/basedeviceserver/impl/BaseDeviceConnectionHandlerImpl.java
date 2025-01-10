@@ -1,7 +1,7 @@
 package org.abstractica.deviceserver.basedeviceserver.impl;
 
 
-import org.abstractica.javablocks.basic.Output;
+import org.abstractica.javablocks.blocks.basic.Output;
 import org.abstractica.deviceserver.basedeviceserver.BaseDeviceServerListener;
 import org.abstractica.deviceserver.basedeviceserver.BaseDeviceServerPacketSendCallback;
 import org.abstractica.deviceserver.basedeviceserver.packetserver.DevicePacketInfo;
@@ -26,7 +26,7 @@ public class BaseDeviceConnectionHandlerImpl implements Output<DevicePacketInfo>
     }
 
     @Override
-    public synchronized void put(DevicePacketInfo packet) throws InterruptedException
+    public synchronized void put(DevicePacketInfo packet) throws Exception
     {
         long curTime = System.currentTimeMillis();
         Long id = packet.getDeviceId();
@@ -45,7 +45,7 @@ public class BaseDeviceConnectionHandlerImpl implements Output<DevicePacketInfo>
         }
     }
 
-    public synchronized int sendPacket(long deviceId, int command, int arg1, int arg2, byte[] load, boolean blocking, boolean forceSend, BaseDeviceServerPacketSendCallback callback) throws InterruptedException
+    public synchronized int sendPacket(long deviceId, int command, int arg1, int arg2, byte[] load, boolean blocking, boolean forceSend, BaseDeviceServerPacketSendCallback callback) throws Exception
     {
         long curTime = System.currentTimeMillis();
         BaseDeviceConnectionImpl deviceConnection = map.get(deviceId);
@@ -87,7 +87,7 @@ public class BaseDeviceConnectionHandlerImpl implements Output<DevicePacketInfo>
         return res;
     }
 
-    public synchronized void updateAliveness() throws InterruptedException
+    public synchronized void updateAliveness() throws Exception
     {
         long curTime = System.currentTimeMillis();
         List<Long> doomedDevices = new ArrayList<>();

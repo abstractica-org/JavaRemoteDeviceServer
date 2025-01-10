@@ -1,23 +1,21 @@
 package org.abstractica.deviceserver.basedeviceserver.packetserver.impl;
 
-import org.abstractica.javablocks.network.ErrorLog;
-import org.abstractica.javablocks.network.SocketBlock;
+import org.abstractica.javablocks.blocks.basic.impl.AbstractBlock;
+import org.abstractica.javablocks.blocks.udp.UDPSocketBlock;
 import org.abstractica.deviceserver.basedeviceserver.packetserver.DevicePacketInfo;
 
 import java.io.IOException;
 import java.net.*;
 
-public class DevicePacketUDPSocketBlockImpl implements SocketBlock<DevicePacketInfo>
+public class DevicePacketUDPSocketBlockImpl extends AbstractBlock implements UDPSocketBlock<DevicePacketInfo>
 {
-    private final ErrorLog err;
     private final DatagramSocket socket;
     private final InetAddress address;
     private final DatagramPacket receivePacket;
     private final DatagramPacket sendPacket;
 
-    public DevicePacketUDPSocketBlockImpl(ErrorLog err, int port, int maxPacketSize) throws SocketException, UnknownHostException
+    public DevicePacketUDPSocketBlockImpl(int port, int maxPacketSize) throws SocketException, UnknownHostException
     {
-        this.err = err;
         this.socket = new DatagramSocket(port);
         this.address = InetAddress.getLocalHost();
         receivePacket = new DatagramPacket(new byte[maxPacketSize], maxPacketSize);
@@ -37,6 +35,12 @@ public class DevicePacketUDPSocketBlockImpl implements SocketBlock<DevicePacketI
     }
 
     @Override
+    public void close()
+    {
+        socket.close();
+    }
+
+    @Override
     public DevicePacketInfo get() throws InterruptedException
     {
         while(true)
@@ -53,7 +57,7 @@ public class DevicePacketUDPSocketBlockImpl implements SocketBlock<DevicePacketI
             }
             catch (IOException e)
             {
-                err.reportIOException(e);
+                ERROR(e.toString());
                 Thread.sleep(5000);
             }
         }
@@ -79,7 +83,7 @@ public class DevicePacketUDPSocketBlockImpl implements SocketBlock<DevicePacketI
                 return;
             } catch (IOException e)
             {
-                err.reportIOException(e);
+                ERROR(e.toString());
                 Thread.sleep(5000);
             }
         }

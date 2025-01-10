@@ -1,6 +1,5 @@
 package org.abstractica.deviceserver.basedeviceserver;
-
-import org.abstractica.javablocks.basic.ThreadControl;
+import org.abstractica.javablocks.blocks.basic.ThreadControl;
 
 public interface BaseDeviceServer extends ThreadControl
 {
@@ -13,6 +12,6 @@ public interface BaseDeviceServer extends ThreadControl
                       byte[] packet,
                       boolean blocking,
                       boolean forceSend,
-                      BaseDeviceServerPacketSendCallback callback   ) throws InterruptedException;
+                      BaseDeviceServerPacketSendCallback callback   ) throws Exception;
     void removeDevice(long deviceId);
 }

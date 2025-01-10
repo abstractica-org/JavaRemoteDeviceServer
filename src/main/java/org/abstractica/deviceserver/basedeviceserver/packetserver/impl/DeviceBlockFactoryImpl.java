@@ -1,7 +1,6 @@
 package org.abstractica.deviceserver.basedeviceserver.packetserver.impl;
 
-import org.abstractica.javablocks.network.SocketBlock;
-import org.abstractica.javablocks.network.impl.ErrorLogImpl;
+import org.abstractica.javablocks.blocks.udp.UDPSocketBlock;
 import org.abstractica.deviceserver.basedeviceserver.packetserver.DeviceBlockFactory;
 import org.abstractica.deviceserver.basedeviceserver.packetserver.DevicePacketInfo;
 
@@ -24,8 +23,8 @@ public class DeviceBlockFactoryImpl implements DeviceBlockFactory
     private DeviceBlockFactoryImpl() {}
 
     @Override
-    public SocketBlock<DevicePacketInfo> getDevicePacketSocket(int port, int maxPackageSize) throws SocketException, UnknownHostException
+    public UDPSocketBlock<DevicePacketInfo> getDevicePacketSocket(int port, int maxPackageSize) throws SocketException, UnknownHostException
     {
-        return new DevicePacketUDPSocketBlockImpl(ErrorLogImpl.getInstance(), port, maxPackageSize);
+        return new DevicePacketUDPSocketBlockImpl(port, maxPackageSize);
     }
 }

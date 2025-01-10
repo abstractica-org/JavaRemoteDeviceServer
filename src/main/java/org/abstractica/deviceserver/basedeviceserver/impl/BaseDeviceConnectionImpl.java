@@ -1,6 +1,6 @@
 package org.abstractica.deviceserver.basedeviceserver.impl;
 
-import org.abstractica.javablocks.basic.Output;
+import org.abstractica.javablocks.blocks.basic.Output;
 import org.abstractica.deviceserver.basedeviceserver.BaseDeviceServerListener;
 import org.abstractica.deviceserver.basedeviceserver.BaseDeviceServerPacketSendCallback;
 import org.abstractica.deviceserver.basedeviceserver.packetserver.DevicePacketInfo;
@@ -59,7 +59,7 @@ public class BaseDeviceConnectionImpl
         return deviceId;
     }
 
-    public synchronized boolean updateAliveness(long curTime) throws InterruptedException
+    public synchronized boolean updateAliveness(long curTime) throws Exception
     {
         if (packetToSend != null)
         {
@@ -100,7 +100,7 @@ public class BaseDeviceConnectionImpl
         return true;
     }
 
-    public synchronized int sendPacket(long curTime, int command, int arg1, int arg2, byte[] load, boolean blocking, boolean forceSend, BaseDeviceServerPacketSendCallback callback) throws InterruptedException
+    public synchronized int sendPacket(long curTime, int command, int arg1, int arg2, byte[] load, boolean blocking, boolean forceSend, BaseDeviceServerPacketSendCallback callback) throws Exception
     {
         if (packetToSend != null)
         {
@@ -131,7 +131,7 @@ public class BaseDeviceConnectionImpl
         return curMsgId;
     }
 
-    public synchronized boolean onPacket(long curTime, DevicePacketInfo packet) throws InterruptedException
+    public synchronized boolean onPacket(long curTime, DevicePacketInfo packet) throws Exception
     {
         //System.out.println("Packet received. Command: " + packet.getCommand());
         if (packet.getDeviceId() != deviceId)
@@ -160,7 +160,7 @@ public class BaseDeviceConnectionImpl
         }
     }
 
-    private synchronized void onDefaultPacket(DevicePacketInfo packet) throws InterruptedException
+    private synchronized void onDefaultPacket(DevicePacketInfo packet) throws Exception
     {
         //sendAcknowledgePacket(packet, ReservedCommands.MSGACK);
         int msgDist = packet.getMsgId() - lastReceivedMsgId;
@@ -192,7 +192,7 @@ public class BaseDeviceConnectionImpl
         sendAcknowledgePacket(packet, MSGACK, 0);
     }
 
-    private synchronized boolean onInitPacket(DevicePacketInfo packet) throws InterruptedException
+    private synchronized boolean onInitPacket(DevicePacketInfo packet) throws Exception
     {
         //ResetSession
         lastReceivedMsgId = 0;
@@ -274,14 +274,14 @@ public class BaseDeviceConnectionImpl
         }
     }
 
-    private synchronized void sendAcknowledgePacket(DevicePacketInfo packet, int command, int response) throws InterruptedException
+    private synchronized void sendAcknowledgePacket(DevicePacketInfo packet, int command, int response) throws Exception
     {
         DevicePacketInfo ack = new DevicePacketInfoImpl(deviceId, packet.getMsgId(), command, response, 0, null);
         ack.setAddress(deviceAddress, devicePort);
         packetSender.put(ack);
     }
 
-    private synchronized void doSendPacket(long curTime) throws InterruptedException
+    private synchronized void doSendPacket(long curTime) throws Exception
     {
         if (packetToSend != null)
         {
