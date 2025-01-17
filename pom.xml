@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.abstractica</groupId>
-    <artifactId>JavaDeviceServer</artifactId>
+    <artifactId>JavaRemoteDeviceServer</artifactId>
     <version>0.1.0</version>
 
     <properties>

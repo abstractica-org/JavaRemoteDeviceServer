@@ -7,7 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="JavaMavenProjectTemplate" />
-        <module name="JavaDeviceServer" />
+        <module name="JavaRemoteDeviceServer" />
       </profile>
     </annotationProcessing>
   </component>

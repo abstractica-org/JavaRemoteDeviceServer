@@ -41,7 +41,7 @@ public class DeviceServerExampleTestRemoteDevice implements DeviceServerListener
 	public boolean acceptAndInitializeNewDevice(Device device)
 	{
 		System.out.println("ServerListener: acceptAndInitializeNewDevice -> " + device);
-		if(!device.getDeviceType().equals("Left_Switch") || !(device.getDeviceVersion() == 1))
+		if(!device.getDeviceType().equals("TestRemoteDevice") || !(device.getDeviceVersion() == 1))
 		{
 			return false;
 		}
