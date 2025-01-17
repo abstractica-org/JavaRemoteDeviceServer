@@ -12,6 +12,6 @@ public interface BaseDeviceServer extends ThreadControl
                       byte[] packet,
                       boolean blocking,
                       boolean forceSend,
-                      BaseDeviceServerPacketSendCallback callback   ) throws Exception;
+                      BaseDeviceServerPacketSendCallback callback   ) throws InterruptedException;
     void removeDevice(long deviceId);
 }

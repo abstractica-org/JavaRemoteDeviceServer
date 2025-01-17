@@ -59,7 +59,7 @@ public class BaseDeviceServerImpl implements BaseDeviceServer, Runnable
                                        byte[] load,
                                        boolean blocking,
                                        boolean forceSend,
-                                       BaseDeviceServerPacketSendCallback callback) throws Exception
+                                       BaseDeviceServerPacketSendCallback callback) throws InterruptedException
     {
         return connectionHandler.sendPacket(deviceId, command, arg1, arg2, load, blocking, forceSend, callback);
     }

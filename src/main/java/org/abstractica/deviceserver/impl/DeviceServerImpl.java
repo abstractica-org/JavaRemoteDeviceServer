@@ -302,7 +302,7 @@ public class DeviceServerImpl implements DeviceServer, BaseDeviceServerListener
 		}
 
 		@Override
-		public synchronized Response sendPacket(int command, int arg1, int arg2, byte[] packet, boolean blocking, boolean forceSend) throws Exception
+		public synchronized Response sendPacket(int command, int arg1, int arg2, byte[] packet, boolean blocking, boolean forceSend) throws InterruptedException
 		{
 			ResponseImpl response = new ResponseImpl();
 			int res = baseServer.sendPacket(id, command, arg1, arg2, packet, blocking, forceSend, response);

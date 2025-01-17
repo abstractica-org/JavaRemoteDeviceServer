@@ -100,7 +100,7 @@ public class BaseDeviceConnectionImpl
         return true;
     }
 
-    public synchronized int sendPacket(long curTime, int command, int arg1, int arg2, byte[] load, boolean blocking, boolean forceSend, BaseDeviceServerPacketSendCallback callback) throws Exception
+    public synchronized int sendPacket(long curTime, int command, int arg1, int arg2, byte[] load, boolean blocking, boolean forceSend, BaseDeviceServerPacketSendCallback callback) throws InterruptedException
     {
         if (packetToSend != null)
         {
@@ -281,7 +281,7 @@ public class BaseDeviceConnectionImpl
         packetSender.put(ack);
     }
 
-    private synchronized void doSendPacket(long curTime) throws Exception
+    private synchronized void doSendPacket(long curTime) throws InterruptedException
     {
         if (packetToSend != null)
         {

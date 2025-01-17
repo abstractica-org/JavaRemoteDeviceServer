@@ -15,13 +15,13 @@ public interface Device
 	                    int arg2,
 	                    byte[] packet,
 	                    boolean blocking,
-	                    boolean forceSend) throws Exception;
+	                    boolean forceSend) throws InterruptedException;
 	default int sendPacketAndWait(int command,
 	                      int arg1,
 	                      int arg2,
 	                      byte[] packet,
 	                      boolean blocking,
-	                      boolean forceSend) throws Exception
+	                      boolean forceSend) throws InterruptedException
 	{
 		Response response = sendPacket(command, arg1, arg2, packet, blocking, forceSend);
 		return response.getResponse();

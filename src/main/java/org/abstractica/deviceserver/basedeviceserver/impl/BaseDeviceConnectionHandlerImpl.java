@@ -45,7 +45,7 @@ public class BaseDeviceConnectionHandlerImpl implements Output<DevicePacketInfo>
         }
     }
 
-    public synchronized int sendPacket(long deviceId, int command, int arg1, int arg2, byte[] load, boolean blocking, boolean forceSend, BaseDeviceServerPacketSendCallback callback) throws Exception
+    public synchronized int sendPacket(long deviceId, int command, int arg1, int arg2, byte[] load, boolean blocking, boolean forceSend, BaseDeviceServerPacketSendCallback callback) throws InterruptedException
     {
         long curTime = System.currentTimeMillis();
         BaseDeviceConnectionImpl deviceConnection = map.get(deviceId);
