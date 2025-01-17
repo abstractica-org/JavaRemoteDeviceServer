@@ -131,7 +131,7 @@ public class BaseDeviceConnectionImpl
         return curMsgId;
     }
 
-    public synchronized boolean onPacket(long curTime, DevicePacketInfo packet) throws Exception
+    public synchronized boolean onPacket(long curTime, DevicePacketInfo packet) throws InterruptedException
     {
         //System.out.println("Packet received. Command: " + packet.getCommand());
         if (packet.getDeviceId() != deviceId)
@@ -160,7 +160,7 @@ public class BaseDeviceConnectionImpl
         }
     }
 
-    private synchronized void onDefaultPacket(DevicePacketInfo packet) throws Exception
+    private synchronized void onDefaultPacket(DevicePacketInfo packet) throws InterruptedException
     {
         //sendAcknowledgePacket(packet, ReservedCommands.MSGACK);
         int msgDist = packet.getMsgId() - lastReceivedMsgId;
@@ -192,7 +192,7 @@ public class BaseDeviceConnectionImpl
         sendAcknowledgePacket(packet, MSGACK, 0);
     }
 
-    private synchronized boolean onInitPacket(DevicePacketInfo packet) throws Exception
+    private synchronized boolean onInitPacket(DevicePacketInfo packet) throws InterruptedException
     {
         //ResetSession
         lastReceivedMsgId = 0;
@@ -274,7 +274,7 @@ public class BaseDeviceConnectionImpl
         }
     }
 
-    private synchronized void sendAcknowledgePacket(DevicePacketInfo packet, int command, int response) throws Exception
+    private synchronized void sendAcknowledgePacket(DevicePacketInfo packet, int command, int response) throws InterruptedException
     {
         DevicePacketInfo ack = new DevicePacketInfoImpl(deviceId, packet.getMsgId(), command, response, 0, null);
         ack.setAddress(deviceAddress, devicePort);

@@ -26,7 +26,7 @@ public class BaseDeviceConnectionHandlerImpl implements Output<DevicePacketInfo>
     }
 
     @Override
-    public synchronized void put(DevicePacketInfo packet) throws Exception
+    public synchronized void put(DevicePacketInfo packet) throws InterruptedException
     {
         long curTime = System.currentTimeMillis();
         Long id = packet.getDeviceId();

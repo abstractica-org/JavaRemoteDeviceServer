@@ -63,13 +63,13 @@ public class DevicePacketServerImpl implements DevicePacketServer
     }
 
     @Override
-    public DevicePacketInfo get() throws Exception
+    public DevicePacketInfo get() throws InterruptedException
     {
         return receiveConnection.get();
     }
 
     @Override
-    public void put(DevicePacketInfo packet) throws Exception
+    public void put(DevicePacketInfo packet) throws InterruptedException
     {
         sendConnection.put(packet);
     }
