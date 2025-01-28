@@ -13,17 +13,21 @@ public interface Device
 	Response sendPacket(int command,
 	                    int arg1,
 	                    int arg2,
+						int arg3,
+						int arg4,
 	                    byte[] packet,
 	                    boolean blocking,
 	                    boolean forceSend) throws InterruptedException;
 	default int sendPacketAndWait(int command,
 	                      int arg1,
 	                      int arg2,
+						  int arg3,
+						  int arg4,
 	                      byte[] packet,
 	                      boolean blocking,
 	                      boolean forceSend) throws InterruptedException
 	{
-		Response response = sendPacket(command, arg1, arg2, packet, blocking, forceSend);
+		Response response = sendPacket(command, arg1, arg2, arg3, arg4, packet, blocking, forceSend);
 		return response.getResponse();
 	}
 }

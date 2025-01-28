@@ -13,16 +13,20 @@ public class DevicePacketInfoImpl implements DevicePacketInfo
     private final int command;
     private final int arg1;
     private final int arg2;
+    private final int arg3;
+    private final int arg4;
 
     private final byte[] load;
 
-    public DevicePacketInfoImpl(long deviceId, int msgId, int command, int arg1, int arg2, byte[] load)
+    public DevicePacketInfoImpl(long deviceId, int msgId, int command, int arg1, int arg2, int arg3, int arg4, byte[] load)
     {
         this.deviceId = deviceId;
         this.msgId = msgId;
         this.command = command;
         this.arg1 = arg1;
         this.arg2 = arg2;
+        this.arg3 = arg3;
+        this.arg4 = arg4;
         this.load = load;
     }
 
@@ -73,6 +77,18 @@ public class DevicePacketInfoImpl implements DevicePacketInfo
     public int getArg2()
     {
         return arg2;
+    }
+
+    @Override
+    public int getArg3()
+    {
+        return arg3;
+    }
+
+    @Override
+    public int getArg4()
+    {
+        return arg4;
     }
 
     @Override

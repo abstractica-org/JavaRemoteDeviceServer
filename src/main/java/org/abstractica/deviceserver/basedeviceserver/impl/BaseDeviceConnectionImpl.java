@@ -94,13 +94,13 @@ public class BaseDeviceConnectionImpl
             {
                 //Send ping
                 //System.out.println("Sending PING to " + deviceId);
-                sendPacket(curTime, PING, 0, 0, null, false, false, null);
+                sendPacket(curTime, PING, 0, 0, 0, 0, null, false, false, null);
             }
         }
         return true;
     }
 
-    public synchronized int sendPacket(long curTime, int command, int arg1, int arg2, byte[] load, boolean blocking, boolean forceSend, BaseDeviceServerPacketSendCallback callback) throws InterruptedException
+    public synchronized int sendPacket(long curTime, int command, int arg1, int arg2, int arg3, int arg4, byte[] load, boolean blocking, boolean forceSend, BaseDeviceServerPacketSendCallback callback) throws InterruptedException
     {
         if (packetToSend != null)
         {
@@ -123,7 +123,7 @@ public class BaseDeviceConnectionImpl
         }
         packetSentCount = 0;
         isBlocking = blocking;
-        packetToSend = new DevicePacketInfoImpl(deviceId, curMsgId, command, arg1, arg2, load);
+        packetToSend = new DevicePacketInfoImpl(deviceId, curMsgId, command, arg1, arg2, arg3, arg4, load);
         packetToSend.setAddress(deviceAddress, devicePort);
         this.callback = callback;
         doSendPacket(curTime);
@@ -143,7 +143,7 @@ public class BaseDeviceConnectionImpl
         this.devicePort = packet.getDevicePort();
         if (!initialized() && packet.getCommand() != INIT && packet.getCommand() != INITACK)
         {
-            sendPacket(curTime, INIT, 0, 0, null, true, true, null);
+            sendPacket(curTime, INIT, 0, 0, 0, 0, null, true, true, null);
             return true;
         }
         switch (packet.getCommand())
@@ -176,7 +176,15 @@ public class BaseDeviceConnectionImpl
             lastReceivedMsgId = packet.getMsgId();
             if (packet.getCommand() != PING)
             {
-                int response = deviceListener.onDevicePacketReceived(deviceId, packet.getCommand(), packet.getArg1(), packet.getArg2(), packet.getLoad());
+                int response = deviceListener.onDevicePacketReceived
+                        (
+                                deviceId, packet.getCommand(),
+                                packet.getArg1(),
+                                packet.getArg2(),
+                                packet.getArg3(),
+                                packet.getArg4(),
+                                packet.getLoad()
+                        );
                 sendAcknowledgePacket(packet, MSGACK, response);
                 return;
             }
@@ -276,7 +284,7 @@ public class BaseDeviceConnectionImpl
 
     private synchronized void sendAcknowledgePacket(DevicePacketInfo packet, int command, int response) throws InterruptedException
     {
-        DevicePacketInfo ack = new DevicePacketInfoImpl(deviceId, packet.getMsgId(), command, response, 0, null);
+        DevicePacketInfo ack = new DevicePacketInfoImpl(deviceId, packet.getMsgId(), command, response, 0, 0, 0, null);
         ack.setAddress(deviceAddress, devicePort);
         packetSender.put(ack);
     }

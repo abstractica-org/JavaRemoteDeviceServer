@@ -40,7 +40,7 @@ public class BaseDeviceServerExample implements BaseDeviceServerListener, BaseDe
 				System.out.println("Sending command: " + command + " to all devices.");
 				for (long id : ids)
 				{
-					int msgId = server.sendPacket(id, command, 1, 2, null, true, false, this);
+					int msgId = server.sendPacket(id, command, 1, 2, 3, 4, null, true, false, this);
 					if (msgId < 0)
 					{
 						System.out.println("Could not send to: " + id);
@@ -94,13 +94,15 @@ public class BaseDeviceServerExample implements BaseDeviceServerListener, BaseDe
 	}
 
 	@Override
-	public int onDevicePacketReceived(long deviceId, int command, int arg1, int arg2, byte[] load)
+	public int onDevicePacketReceived(long deviceId, int command, int arg1, int arg2, int arg3, int arg4, byte[] load)
 	{
 		System.out.println();
 		System.out.println("Packet received from device: " + deviceId);
 		System.out.println("  Command: " + command);
 		System.out.println("  Arg1: " + arg1);
 		System.out.println("  Arg2: " + arg2);
+		System.out.println("  Arg3: " + arg3);
+		System.out.println("  Arg4: " + arg4);
 		if(load != null)
 		{
 			System.out.println("  Load size: " + load.length);

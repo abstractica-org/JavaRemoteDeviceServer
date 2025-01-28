@@ -9,6 +9,8 @@ public interface BaseDeviceServer extends ThreadControl
                       int command,
                       int arg1,
                       int arg2,
+                      int arg3,
+                      int arg4,
                       byte[] packet,
                       boolean blocking,
                       boolean forceSend,

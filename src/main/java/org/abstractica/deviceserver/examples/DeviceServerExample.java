@@ -32,7 +32,7 @@ public class DeviceServerExample implements DeviceServerListener, DevicePacketHa
 		while(true)
 		{
 			System.out.println("Sending packet!");
-			Response response = myDevice.sendPacket(42, 1, 2, null, true, false);
+			Response response = myDevice.sendPacket(42, 1, 2, 3, 4, null, true, false);
 			System.out.println("Waiting for response...");
 			System.out.println("Response: " + response.getResponse());
 			Thread.sleep(200);
@@ -64,10 +64,14 @@ public class DeviceServerExample implements DeviceServerListener, DevicePacketHa
 	}
 
 	@Override
-	public int onPacket(int command, int arg1, int arg2, byte[] load)
+	public int onPacket(int command, int arg1, int arg2, int arg3, int arg4, byte[] load)
 	{
 		System.out.print("DevicePacketHandler: onPacket -> ");
-		System.out.println("(Command: " + command + ", arg1: " + arg1 + ", arg2: " + arg2 + ")");
+		System.out.println("(Command: " + command +
+				", arg1: " + arg1 +
+				", arg2: " + arg2 +
+				", arg3: " + arg3 +
+				", arg4: " + arg4 + ")");
 		return 0;
 	}
 

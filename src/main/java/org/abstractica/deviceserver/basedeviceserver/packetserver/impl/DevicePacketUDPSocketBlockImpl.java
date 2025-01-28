@@ -105,24 +105,26 @@ public class DevicePacketUDPSocketBlockImpl extends AbstractBlock implements UDP
         int command = (int) BufferUtil.readUnsignedIntegerFromBuffer(data, 10, 2);
         int arg1 = (int) BufferUtil.readUnsignedIntegerFromBuffer(data, 12, 2);
         int arg2 = (int) BufferUtil.readUnsignedIntegerFromBuffer(data, 14, 2);
+        int arg3 = (int) BufferUtil.readUnsignedIntegerFromBuffer(data, 16, 2);
+        int arg4 = (int) BufferUtil.readUnsignedIntegerFromBuffer(data, 18, 2);
 
         byte[] load = null;
-        if(length > 16)
+        if(length > 20)
         {
-            load = new byte[length - 16];
-            for (int i = 16; i < length; ++i)
+            load = new byte[length - 20];
+            for (int i = 20; i < length; ++i)
             {
-                load[i - 16] = data[i + offset];
+                load[i - 20] = data[i + offset];
             }
         }
-        DevicePacketInfoImpl res = new DevicePacketInfoImpl(deviceId, msgId, command, arg1, arg2, load);
+        DevicePacketInfoImpl res = new DevicePacketInfoImpl(deviceId, msgId, command, arg1, arg2, arg3, arg4, load);
         res.setAddress(address, port);
         return res;
     }
 
     private void fromRemoteDevicePacket(DevicePacketInfo remoteDevicePacketInfo, DatagramPacket datagramPacket)
     {
-        int size = 16;
+        int size = 20;
         byte[] load = null;
         if(remoteDevicePacketInfo.hasLoad())
         {
@@ -135,11 +137,13 @@ public class DevicePacketUDPSocketBlockImpl extends AbstractBlock implements UDP
         BufferUtil.writeIntegerToBuffer(remoteDevicePacketInfo.getCommand(), data, 10, 2);
         BufferUtil.writeIntegerToBuffer(remoteDevicePacketInfo.getArg1(), data, 12, 2);
         BufferUtil.writeIntegerToBuffer(remoteDevicePacketInfo.getArg2(), data, 14, 2);
+        BufferUtil.writeIntegerToBuffer(remoteDevicePacketInfo.getArg3(), data, 16, 2);
+        BufferUtil.writeIntegerToBuffer(remoteDevicePacketInfo.getArg4(), data, 18, 2);
         if(load != null)
         {
             for (int i = 0; i < load.length; ++i)
             {
-                data[16 + i] = load[i];
+                data[20 + i] = load[i];
             }
         }
         byte[] dataBuf = sendPacket.getData();

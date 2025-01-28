@@ -7,5 +7,5 @@ public interface BaseDeviceServerListener
     void onDeviceConnected(long deviceId);
     void onDeviceDisconnected(long deviceId);
     void onDeviceLost(long deviceId);
-    int onDevicePacketReceived(long deviceId, int command, int arg1, int arg2, byte[] load);
+    int onDevicePacketReceived(long deviceId, int command, int arg1, int arg2, int arg3, int arg4, byte[] load);
 }

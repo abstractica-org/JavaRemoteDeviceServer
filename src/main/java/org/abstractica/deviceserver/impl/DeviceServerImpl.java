@@ -218,7 +218,7 @@ public class DeviceServerImpl implements DeviceServer, BaseDeviceServerListener
 	}
 
 	@Override
-	public int onDevicePacketReceived(long deviceId, int command, int arg1, int arg2, byte[] load)
+	public int onDevicePacketReceived(long deviceId, int command, int arg1, int arg2, int arg3, int arg4, byte[] load)
 	{
 		DeviceImpl dev;
 		synchronized(map)
@@ -229,7 +229,7 @@ public class DeviceServerImpl implements DeviceServer, BaseDeviceServerListener
 		{
 			return 1;
 		}
-		return dev.onPacketReceived(command, arg1, arg2, load);
+		return dev.onPacketReceived(command, arg1, arg2, arg3, arg4, load);
 	}
 
 	private class DeviceImpl implements Device
@@ -302,10 +302,10 @@ public class DeviceServerImpl implements DeviceServer, BaseDeviceServerListener
 		}
 
 		@Override
-		public synchronized Response sendPacket(int command, int arg1, int arg2, byte[] packet, boolean blocking, boolean forceSend) throws InterruptedException
+		public synchronized Response sendPacket(int command, int arg1, int arg2, int arg3, int arg4, byte[] packet, boolean blocking, boolean forceSend) throws InterruptedException
 		{
 			ResponseImpl response = new ResponseImpl();
-			int res = baseServer.sendPacket(id, command, arg1, arg2, packet, blocking, forceSend, response);
+			int res = baseServer.sendPacket(id, command, arg1, arg2, arg3, arg4, packet, blocking, forceSend, response);
 			if(res < 0)
 			{
 				return null;
@@ -352,7 +352,7 @@ public class DeviceServerImpl implements DeviceServer, BaseDeviceServerListener
 			notifyAll();
 		}
 
-		private synchronized int onPacketReceived(int command, int arg1, int arg2, byte[] load)
+		private synchronized int onPacketReceived(int command, int arg1, int arg2, int arg3, int arg4, byte[] load)
 		{
 			if(packetHandler == null)
 			{
@@ -360,9 +360,11 @@ public class DeviceServerImpl implements DeviceServer, BaseDeviceServerListener
 				System.out.println("    Command: " + command);
 				System.out.println("    Arg1: " + arg1);
 				System.out.println("    Arg2: " + arg2);
+				System.out.println("    Arg3: " + arg3);
+				System.out.println("    Arg4: " + arg4);
 				return 1;
 			}
-			return packetHandler.onPacket(command, arg1, arg2, load);
+			return packetHandler.onPacket(command, arg1, arg2, arg3, arg4, load);
 		}
 
 		private synchronized void onLost()

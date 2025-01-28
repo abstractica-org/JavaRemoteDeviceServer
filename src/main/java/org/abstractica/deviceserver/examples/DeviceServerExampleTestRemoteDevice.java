@@ -15,7 +15,7 @@ public class DeviceServerExampleTestRemoteDevice implements DeviceServerListener
 		System.out.println("Creating server...");
 		DeviceServer server = new DeviceServerImpl(3377,1024,10,1000, this);
 		System.out.println("Creating device...");
-		Device myDevice = server.createDevice(14948781, "Left_Switch", 1);
+		Device myDevice = server.createDevice(10300466, "TestRemoteDevice", 1);
 		System.out.println("Adding listener...");
 		myDevice.addConnectionListener(this);
 		System.out.println("Adding device to server...");
@@ -26,14 +26,14 @@ public class DeviceServerExampleTestRemoteDevice implements DeviceServerListener
 		myDevice.waitForConnection();
 		//server.waitForAllDevicesToConnect();
 		System.out.println("Device is connected!");
-
-		myDevice.sendPacket(1000, 0, 0, null, true, false);
+		Thread.sleep(3000);
 		while(true)
 		{
-			Thread.sleep(10000);
-			myDevice.sendPacket(1501, 0, 0, null, true, false);
-			Thread.sleep(10000);
-			myDevice.sendPacket(1500, 0, 0, null, true, false);
+			for(int i = 1; i <= 5; ++i)
+			{
+				myDevice.sendPacket(1000, i, 10, 0, 0, null, true, false);
+				Thread.sleep(15000);
+			}
 		}
 	}
 
@@ -62,10 +62,14 @@ public class DeviceServerExampleTestRemoteDevice implements DeviceServerListener
 	}
 
 	@Override
-	public int onPacket(int command, int arg1, int arg2, byte[] load)
+	public int onPacket(int command, int arg1, int arg2, int arg3, int arg4, byte[] load)
 	{
 		System.out.print("DevicePacketHandler: onPacket -> ");
-		System.out.println("(Command: " + command + ", arg1: " + arg1 + ", arg2: " + arg2 + ")");
+		System.out.println("(Command: " + command +
+				", arg1: " + arg1 +
+				", arg2: " + arg2 +
+				", arg3: " + arg3 +
+				", arg4: " + arg4 + ")");
 		return 0;
 	}
 
