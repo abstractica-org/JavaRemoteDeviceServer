@@ -113,6 +113,8 @@ public class DevicePacketInfoImpl implements DevicePacketInfo
         buf.append("Command: " + command + "\n");
         buf.append("Argument 1: " + arg1 + "\n");
         buf.append("Argument 2: " + arg2 + "\n");
+        buf.append("Argument 3: " + arg3 + "\n");
+        buf.append("Argument 4: " + arg4 + "\n");
         buf.append("Load size: " + (load == null ? 0 : load.length) + "\n");
         return buf.toString();
     }
