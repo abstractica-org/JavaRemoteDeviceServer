@@ -16,12 +16,15 @@ public class BaseDeviceConnectionHandlerImpl implements Output<DevicePacketInfo>
     private final Map<Long, BaseDeviceConnectionImpl> map;
     private final BaseDeviceServerListener listener;
     private final Output<DevicePacketInfo> packageSender;
+    private final int serverId;
 
     public BaseDeviceConnectionHandlerImpl(Output<DevicePacketInfo> packageSender,
-                                           BaseDeviceServerListener listener)
+                                           BaseDeviceServerListener listener,
+                                           int serverId)
     {
         this.packageSender = packageSender;
         this.listener = listener;
+        this.serverId = serverId;
         this.map = new HashMap<>();
     }
 

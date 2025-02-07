@@ -13,18 +13,19 @@ public class BaseDeviceServerExample implements BaseDeviceServerListener, BaseDe
 {
 	public static void main(String[] args) throws Exception
 	{
-		BaseDeviceServerExample exampleServer = new BaseDeviceServerExample(3377, 1024, 10, 1000);
+		BaseDeviceServerExample exampleServer = new BaseDeviceServerExample(3377, 0, 1024, 10, 1000);
 		exampleServer.run();
 	}
 
 	private BaseDeviceServer server;
 
 	public BaseDeviceServerExample(int port,
+								   int serverId,
 	                               int maxPacketSize,
 	                               int bufferSize,
 	                               long updateInterval) throws SocketException, UnknownHostException
 	{
-		server = new BaseDeviceServerImpl(port, maxPacketSize, bufferSize, updateInterval, this);
+		server = new BaseDeviceServerImpl(port, serverId, maxPacketSize, bufferSize, updateInterval, this);
 	}
 
 	public void run() throws Exception

@@ -16,6 +16,7 @@ public class DeviceServerImpl implements DeviceServer, BaseDeviceServerListener
 	private final Map<Long, DeviceImpl> map;
 
 	public DeviceServerImpl(int port,
+							int serverId,
 	                        int maxPacketSize,
 	                        int bufferSize,
 	                        long updateInterval,
@@ -24,6 +25,7 @@ public class DeviceServerImpl implements DeviceServer, BaseDeviceServerListener
 		this.listener = listener;
 		this.map = new HashMap<>();
 		baseServer = new BaseDeviceServerImpl(  port,
+												serverId,
 												maxPacketSize,
 												bufferSize,
 												updateInterval,

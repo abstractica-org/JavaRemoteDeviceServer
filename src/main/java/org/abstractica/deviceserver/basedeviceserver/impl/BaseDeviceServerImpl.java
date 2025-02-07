@@ -27,13 +27,14 @@ public class BaseDeviceServerImpl implements BaseDeviceServer, Runnable
     private volatile boolean running;
 
     public BaseDeviceServerImpl(int port,
+                                int serverId,
                                 int maxPacketSize,
                                 int bufferSize,
                                 long updateInterval,
                                 BaseDeviceServerListener listener) throws SocketException, UnknownHostException
     {
         this.packetServer = new DevicePacketServerImpl(port, maxPacketSize, bufferSize);
-        this.connectionHandler = new BaseDeviceConnectionHandlerImpl(packetServer, listener);
+        this.connectionHandler = new BaseDeviceConnectionHandlerImpl(packetServer, listener, serverId);
         ThreadBlock<DevicePacketInfo> threadBlock = BasicBlocks.getThreadBlock();
         threadBlock.setDebugReporter(null);
         threadBlock.setInput(packetServer);

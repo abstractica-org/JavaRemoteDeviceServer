@@ -13,9 +13,9 @@ public class DeviceServerExampleTestRemoteDevice implements DeviceServerListener
 	public void runExample() throws Exception
 	{
 		System.out.println("Creating server...");
-		DeviceServer server = new DeviceServerImpl(3377,1024,10,1000, this);
+		DeviceServer server = new DeviceServerImpl(3377, 0, 1024,10,1000, this);
 		System.out.println("Creating device...");
-		Device myDevice = server.createDevice(10300466, "TestRemoteDevice", 1);
+		Device myDevice = server.createDevice(4633217, "TestRemoteDevice", 1);
 		System.out.println("Adding listener...");
 		myDevice.addConnectionListener(this);
 		System.out.println("Adding device to server...");
