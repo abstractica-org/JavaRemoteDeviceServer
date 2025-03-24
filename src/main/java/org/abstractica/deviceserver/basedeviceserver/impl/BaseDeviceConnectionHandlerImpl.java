@@ -29,29 +29,43 @@ public class BaseDeviceConnectionHandlerImpl implements Output<DevicePacketInfo>
     }
 
     @Override
-    public synchronized void put(DevicePacketInfo packet) throws InterruptedException
+    public void put(DevicePacketInfo packet) throws InterruptedException
     {
         long curTime = System.currentTimeMillis();
         Long id = packet.getDeviceId();
-        BaseDeviceConnectionImpl deviceConnection = map.get(id);
+        BaseDeviceConnectionImpl deviceConnection;
+        synchronized (map)
+        {
+            deviceConnection = map.get(id);
+        }
         if (deviceConnection == null)
         {
             deviceConnection = new BaseDeviceConnectionImpl(packageSender,listener,id);
             if(deviceConnection.onPacket(curTime, packet))
             {
-                map.put(id, deviceConnection);
+                synchronized (map)
+                {
+                    map.put(id, deviceConnection);
+                }
             }
         }
         else if(!deviceConnection.onPacket(curTime, packet))
         {
-            map.remove(id);
+            synchronized (map)
+            {
+                map.remove(id);
+            }
         }
     }
 
-    public synchronized int sendPacket(long deviceId, int command, int arg1, int arg2, int arg3, int arg4, byte[] load, boolean blocking, boolean forceSend, BaseDeviceServerPacketSendCallback callback) throws InterruptedException
+    public int sendPacket(long deviceId, int command, int arg1, int arg2, int arg3, int arg4, byte[] load, boolean blocking, boolean forceSend, BaseDeviceServerPacketSendCallback callback) throws InterruptedException
     {
         long curTime = System.currentTimeMillis();
-        BaseDeviceConnectionImpl deviceConnection = map.get(deviceId);
+        BaseDeviceConnectionImpl deviceConnection;
+        synchronized (map)
+        {
+            deviceConnection = map.get(deviceId);
+        }
         if(deviceConnection == null)
         {
             return -1;
@@ -59,9 +73,13 @@ public class BaseDeviceConnectionHandlerImpl implements Output<DevicePacketInfo>
         return deviceConnection.sendPacket(curTime, command, arg1, arg2, arg3, arg4, load, blocking, forceSend, callback);
     }
 
-    public synchronized int getCurrentMsgId(long deviceId)
+    public int getCurrentMsgId(long deviceId)
     {
-        BaseDeviceConnectionImpl deviceConnection = map.get(deviceId);
+        BaseDeviceConnectionImpl deviceConnection = null;
+        synchronized (map)
+        {
+            deviceConnection = map.get(deviceId);
+        }
         if(deviceConnection == null)
         {
             return -1;
@@ -69,9 +87,13 @@ public class BaseDeviceConnectionHandlerImpl implements Output<DevicePacketInfo>
         return deviceConnection.getCurrentMsgId();
     }
 
-    public synchronized boolean readyToSendPacket(long deviceId)
+    public boolean readyToSendPacket(long deviceId)
     {
-        BaseDeviceConnectionImpl deviceConnection = map.get(deviceId);
+        BaseDeviceConnectionImpl deviceConnection = null;
+        synchronized (map)
+        {
+            deviceConnection = map.get(deviceId);
+        }
         if(deviceConnection == null)
         {
             return false;
@@ -79,40 +101,53 @@ public class BaseDeviceConnectionHandlerImpl implements Output<DevicePacketInfo>
         return deviceConnection.readyToSendPacket();
     }
 
-    public synchronized long[] getAllDeviceIds()
+    public long[] getAllDeviceIds()
     {
-        long[] res = new long[map.size()];
-        int i = 0;
-        for(BaseDeviceConnectionImpl con : map.values())
+        synchronized (map)
         {
-            res[i++] = con.getDeviceId();
+            long[] res = new long[map.size()];
+            int i = 0;
+            for (BaseDeviceConnectionImpl con : map.values())
+            {
+                res[i++] = con.getDeviceId();
+            }
+            return res;
         }
-        return res;
     }
 
-    public synchronized void updateAliveness() throws Exception
+    public void updateAliveness() throws Exception
     {
         long curTime = System.currentTimeMillis();
         List<Long> doomedDevices = new ArrayList<>();
-        for (BaseDeviceConnectionImpl deviceConnection : map.values())
+        synchronized (map)
         {
-            if(!deviceConnection.updateAliveness(curTime))
+            for (BaseDeviceConnectionImpl deviceConnection : map.values())
             {
-                doomedDevices.add(deviceConnection.getDeviceId());
+                if (!deviceConnection.updateAliveness(curTime))
+                {
+                    doomedDevices.add(deviceConnection.getDeviceId());
+                }
             }
-        }
-        for(Long id : doomedDevices)
-        {
-            map.remove(id);
+            for (Long id : doomedDevices)
+            {
+                map.remove(id);
+            }
         }
     }
 
-	public synchronized void removeDevice(long deviceId)
+	public void removeDevice(long deviceId)
 	{
-        BaseDeviceConnectionImpl con = map.get(deviceId);
-        if(con != null)
+        BaseDeviceConnectionImpl con = null;
+        synchronized (map)
         {
-            map.remove(deviceId);
+            con = map.get(deviceId);
+            if (con != null)
+            {
+                map.remove(deviceId);
+            }
+        }
+        if (con != null)
+        {
             con.removeDevice();
         }
 	}

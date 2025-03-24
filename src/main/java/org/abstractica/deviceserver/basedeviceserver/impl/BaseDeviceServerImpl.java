@@ -126,7 +126,7 @@ public class BaseDeviceServerImpl implements BaseDeviceServer, Runnable
             try
             {
                 connectionHandler.updateAliveness();
-                wait(updateInterval);
+                Thread.sleep(updateInterval);
             } catch (Exception e)
             {
 
