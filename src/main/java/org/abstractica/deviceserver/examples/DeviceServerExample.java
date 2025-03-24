@@ -18,7 +18,7 @@ public class DeviceServerExample implements DeviceServerListener, DevicePacketHa
 		System.out.println("Creating server...");
 		DeviceServer server = new DeviceServerImpl(3377, 0, 1024,10,1000, this);
 		System.out.println("Creating device...");
-		Device myDevice = server.createDevice(10314706, "TestDevice", 1);
+		Device myDevice = server.createDevice(10300466, "Locomotive", 1);
 		System.out.println("Adding listener...");
 		myDevice.addConnectionListener(this);
 		System.out.println("Adding device to server...");
@@ -31,11 +31,18 @@ public class DeviceServerExample implements DeviceServerListener, DevicePacketHa
 		System.out.println("Device is connected!");
 		while(true)
 		{
-			System.out.println("Sending packet!");
-			Response response = myDevice.sendPacket(42, 1, 2, 3, 4, null, true, false);
-			System.out.println("Waiting for response...");
-			System.out.println("Response: " + response.getResponse());
-			Thread.sleep(200);
+			Thread.sleep(5000);
+			System.out.println("Set power: 255");
+			Response response = myDevice.sendPacket(
+					1003,
+					255, 0, 0, 0,
+					null, false, true);
+			Thread.sleep(10000);
+			System.out.println("Set power: 255");
+			response = myDevice.sendPacket(
+					1003,
+					0, 0, 0, 0,
+					null, false, true);
 		}
 	}
 
@@ -43,7 +50,7 @@ public class DeviceServerExample implements DeviceServerListener, DevicePacketHa
 	public boolean acceptAndInitializeNewDevice(Device device)
 	{
 		System.out.println("ServerListener: acceptAndInitializeNewDevice -> " + device);
-		if(!device.getDeviceType().equals("TestDevice") || !(device.getDeviceVersion() == 1))
+		if(!device.getDeviceType().equals("Locomotive") || !(device.getDeviceVersion() == 1))
 		{
 			return false;
 		}

@@ -47,22 +47,22 @@ public class BaseDeviceServerImpl implements BaseDeviceServer, Runnable
     }
 
     @Override
-    public synchronized boolean readyToSendPacket(long deviceId)
+    public boolean readyToSendPacket(long deviceId)
     {
         return connectionHandler.readyToSendPacket(deviceId);
     }
 
     @Override
-    public synchronized int sendPacket(long deviceId,
-                                       int command,
-                                       int arg1,
-                                       int arg2,
-                                       int arg3,
-                                       int arg4,
-                                       byte[] load,
-                                       boolean blocking,
-                                       boolean forceSend,
-                                       BaseDeviceServerPacketSendCallback callback) throws InterruptedException
+    public int sendPacket( long deviceId,
+                           int command,
+                           int arg1,
+                           int arg2,
+                           int arg3,
+                           int arg4,
+                           byte[] load,
+                           boolean blocking,
+                           boolean forceSend,
+                           BaseDeviceServerPacketSendCallback callback) throws InterruptedException
     {
         return connectionHandler.sendPacket(deviceId, command, arg1, arg2, arg3, arg4, load, blocking, forceSend, callback);
     }
@@ -74,13 +74,13 @@ public class BaseDeviceServerImpl implements BaseDeviceServer, Runnable
     }
 
     @Override
-    public synchronized long[] getAllDeviceIds()
+    public long[] getAllDeviceIds()
     {
         return connectionHandler.getAllDeviceIds();
     }
 
     @Override
-    public synchronized void start()
+    public void start()
     {
         if (!running)
         {
@@ -113,13 +113,13 @@ public class BaseDeviceServerImpl implements BaseDeviceServer, Runnable
 
 
     @Override
-    public synchronized boolean isRunning()
+    public boolean isRunning()
     {
         return running;
     }
 
     @Override
-    public synchronized void run()
+    public void run()
     {
         while (running)
         {
